@@ -9,6 +9,12 @@ angular.module('myApp.controllers', []).
 
         forge.contact.selectAll(
             function (contacts) {
+                // ['butt',"face",'you','me','what',
+                // 'up','homies'].map(function (name) {
+                //     return {displayName: name};
+                // }).forEach(function (thing) {
+                //     $scope.contacts.push(thing);
+                // });
                 $scope.contacts = contacts;
             },
             function (error) {
