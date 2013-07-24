@@ -9,13 +9,9 @@ angular.module('myApp.controllers', []).
 
         forge.contact.selectAll(
             function (contacts) {
-                // ['butt',"face",'you','me','what',
-                // 'up','homies'].map(function (name) {
-                //     return {displayName: name};
-                // }).forEach(function (thing) {
-                //     $scope.contacts.push(thing);
-                // });
-                $scope.contacts = contacts;
+                $scope.$apply(function(){
+                     $scope.contacts = contacts;
+                });
             },
             function (error) {
                 alert("you done fucked up");
@@ -26,7 +22,9 @@ angular.module('myApp.controllers', []).
 
         $scope.clicked = function (contact) {
            forge.contact.selectById(contact.id, function (fullContact) {
-                $scope.textArea += fullContact.phoneNumbers[0].value
+                $scope.$apply( function () {
+                    $scope.textArea += fullContact.phoneNumbers[0].value;
+                });
            }, function () {
 
            });
