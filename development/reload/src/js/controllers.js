@@ -23,6 +23,16 @@ angular.module('myApp.controllers', []).
             }
         )
 
+
+        $scope.clicked = function (contact) {
+           forge.contact.selectById(contact.id, function (fullContact) {
+                $scope.textArea += fullContact.phoneNumbers[0].value
+           }, function () {
+
+           });
+        }
+       // setInterval(function () {console.log($scope.textArea);}, 5000);
+
   // forge.contact.select(
   //       function (selected) {
   //           alert(JSON.stringify(selected));

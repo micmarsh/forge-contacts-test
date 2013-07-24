@@ -22,8 +22,10 @@
     <li><a href="#/view2">view2</a></li>
   </ul>
 
+  <textarea ng-model="textArea"></textarea>
+
   <ul id="contacts">
-  	<li ng-repeat="contact in contacts">
+  	<li ng-repeat="contact in contacts" ng-click="clicked(contact)">
   		{{contact.displayName}}
   	</li>
   </ul>
