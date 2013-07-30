@@ -5,7 +5,7 @@
 angular.module('myApp.controllers', []).
   controller('contactlist', [ '$scope', '$q', '$timeout',
     function($scope, $q, $timeout) {
-        var FORGE = false; //window.forge
+        var FORGE = !!window.forge
         var FAKES = [{name: "Me"},
                         {name:"You"},
                         {name: "Them"},
@@ -14,9 +14,10 @@ angular.module('myApp.controllers', []).
                         {name: "Hermano"},
                         {name: "Homie"},
                         {name: "Butts"}];
+
         function getMoreContacts (counter) {
           var q = $q.defer();
-          if (FORGE)//window.forge)
+          if (FORGE)
             forge.internal.call('get.some', {}, function (contacts) {
               q.resolve(contacts);
             }, function (error) {
