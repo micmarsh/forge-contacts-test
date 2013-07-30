@@ -3,48 +3,50 @@
 /* Controllers */
 
 angular.module('myApp.controllers', []).
-  controller('contactlist', [ '$scope', '$q',
-    function($scope, Q) {
-        $scope.contacts = [{displayName: 'ass'}];
+  controller('contactlist', [ '$scope', '$q', '$timeout',
+    function($scope, $q, $timeout) {
+        var FORGE = false; //window.forge
+        var FAKES = [{name: "Me"},
+                        {name:"You"},
+                        {name: "Them"},
+                        {name: "name"},
+                        {name: "Nombre"},
+                        {name: "Hermano"},
+                        {name: "Homie"},
+                        {name: "Butts"}];
+        function getMoreContacts (counter) {
+          var q = $q.defer();
+          if (FORGE)//window.forge)
+            forge.internal.call('get.some', {}, function (contacts) {
+              q.resolve(contacts);
+            }, function (error) {
+              q.reject(error);
+            });
+          else
+            $timeout(function () {
+              q.resolve(FAKES);
+            }, 500);
+          return q.promise; 
+        };
+        var counter = 0;
 
-        // forge.contact.selectAll(
-        //     function (contacts) {
-        //         $scope.$apply(function(){
-        //              $scope.contacts = contacts;
-        //         });
-        //     },
-        //     function (error) {
-        //         alert("you done fucked up");
-        //         alert(error);
-        //     }
-        // )
-
-        var lulzPromise = function(){
-          var defered = Q.defer();
-          setTimeout(function(){
-            defered.resolve("poop");
-          },1);
-          return defered.promise;
+        $scope.contacts = [];
+        $scope.loadMore = function () {
+           getMoreContacts(counter).then(function (contacts) {
+                //$scope.$apply(function () {
+                  for (var i = 0; i < contacts.length; i++) {
+                      $scope.contacts.push(contacts[i]);
+                  }
+                  counter += contacts.length; 
+               // });
+           
+          });
         }
-
-        var lulz = lulzPromise();
-        for(var i = 0; i < 30000; i++){
-          lulz.then(function (message) {
-             console.log(message);
-          })
-        }
-        
-
-
         $scope.clicked = function (contact) {
-           // forge.contact.selectById(contact.id, function (fullContact) {
-           //      $scope.$apply( function () {
-           //          $scope.textArea += fullContact.phoneNumbers[0].value;
-           //      });
-           // }, function () {
-
-           // });
+        
         }
+
+        $scope.loadMore();
        // setInterval(function () {console.log($scope.textArea);}, 5000); 
 
   // forge.contact.select(

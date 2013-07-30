@@ -15,20 +15,21 @@
   <title>My AngularJS App</title>
   <link rel="stylesheet" href="css/app.css"/>
 </head>
-<body ng-controller="contactlist">
+<body ng-controller="contactlist" >
   <h1>Angular Seed App Lol</h1>
-  <ul class="menu">
+  <!-- <ul class="menu">
     <li><a href="#/view1">view1</a></li>
     <li><a href="#/view2">view2</a></li>
-  </ul>
+  </ul> -->
 
   <textarea ng-model="textArea"></textarea>
-
-  <ul id="contacts">
+  <ul id="contacts" >
   	<li ng-repeat="contact in contacts" ng-click="clicked(contact)">
-  		{{contact.displayName}}
+  		{{contact.name}}
   	</li>
   </ul>
+
+  <button ng-click="loadMore()">Load Some More</button>
 
   <div ng-view></div>
 

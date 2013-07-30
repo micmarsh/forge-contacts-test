@@ -10,3 +10,16 @@ angular.module('myApp.directives', []).
     };
   }]);
 
+angular.module('myApp.directives',[]).
+    directive('whenScrolled', function () {
+        return function (scope, elm, attr) {
+            var raw = elm[0];
+            elm.bind('scroll', function () {
+                console.log('wut');
+                if (raw.scrollTop + raw.offsetHeight >= raw.scrollHeight) {
+                    scope.$apply(attr.whenScrolled);
+                }
+            });
+            console.log(elm);
+        };
+});
