@@ -9,7 +9,7 @@ angular.module('myApp.controllers', []).
       $scope.tags = [];
 
       function setNotes(options) {
-        $notes.get(options).then(function (notes){
+        return $notes.get(options).then(function (notes){
           $scope.$apply(function(){
             $scope.notes = notes;
           })
@@ -18,7 +18,7 @@ angular.module('myApp.controllers', []).
       setNotes({});
 
       function setTags(options) {
-        $notes.getTags(options).then(function (tags){
+        return $notes.getTags(options).then(function (tags){
           $scope.$apply(function(){
             $scope.tags = tags;
           });
@@ -30,7 +30,8 @@ angular.module('myApp.controllers', []).
 
       var selectedTags = [];
       $scope.toggleTag = function (tag) {
-        var index = selectedTags.indexOf(tag);
+        var index = selectedTags.indexOf(tag),
+        options;
         if(index === -1){
           selectedTags.push(tag);
           console.log(selectedTags);
@@ -42,7 +43,10 @@ angular.module('myApp.controllers', []).
           selectedTags = selectedTags.slice(0, index).concat(selectedTags.slice(index + 1));
           console.log(selectedTags);
         }
-        $notes.getTags({hashtags: selectedTags});
+        options = {hashtags: selectedTags}
+        setTags(options).then(function(){
+          return setNotes(options);
+        });
       }
   }])
   .controller('MyCtrl2', [function() {

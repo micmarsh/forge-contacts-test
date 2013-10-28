@@ -37,9 +37,9 @@ angular.module('myApp.services').service('$kinvey', [ function(){
     return Kinvey;
 }]);
 
-angular.module('myApp.services').service('$notes', [ '$kinvey', function ($kinvey) {
-    this.get = function () {
-        var blankQuery = new Kinvey.Query();
+angular.module('myApp.services').service('$notes', [ '$kinvey', '$query', function ($kinvey, $query) {
+    this.get = function (options) {
+        var blankQuery = $query.sortedQueryFrom(options);
         blankQuery.notEqualTo('state', 'deleted');
         var promise = Kinvey.DataStore.count('notes', blankQuery, {offline: true});
         return promise.then(function(count){
@@ -79,9 +79,9 @@ angular.module('myApp.services').service('$notes', [ '$kinvey', function ($kinve
         return agg;
     };
 
-    this.getTags = function(){
-        var agg =  makeTagGetter('hashtags');
-        agg.query(new Kinvey.Query);
+    this.getTags = function(options){
+        var agg = makeTagGetter('hashtags');
+        agg.query($query.sortedQueryFrom(options));
         return Kinvey.DataStore.group('notes', agg, {offline: true}).then(function (_arg) {
           var count, result, tag, _results;
           result = _arg[0].result;
