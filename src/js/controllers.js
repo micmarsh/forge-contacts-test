@@ -5,6 +5,8 @@
 angular.module('myApp.controllers', []).
   controller('notelist', [ '$scope', '$q', '$notes',
     function($scope, $q, $notes) {
+      $scope.notes = [];
+      $scope.tags = [];
 
       $notes.get().then(function (notes){
         $scope.$apply(function(){
@@ -19,6 +21,11 @@ angular.module('myApp.controllers', []).
       }, function(error){
         console.log(error);
       });
+
+      var selectedTags = [];
+      $scope.toggleTag = function (tag) {
+
+      }
   }])
   .controller('MyCtrl2', [function() {
 
