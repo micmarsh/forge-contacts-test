@@ -37,7 +37,31 @@ angular.module('myApp.services').service('$kinvey', [ function(){
     return Kinvey;
 }]);
 
-angular.module('myApp.services').service('$notes', [ '$kinvey', '$query', function ($kinvey, $query) {
+angular.module('myApp.services').service('$random', [function() {
+    var tags = ["#read", "#todo", "yolo", "#groceries", "#five", "#seven", '#groceris',
+    "#eat", '#e', '#why', '#yay', '#watch']
+    function fromArray(array) {
+        var index = Math.floor(Math.random() * array.length);
+        return array[index];
+    }
+
+    function string(){
+        return Math.random().toString(36).substring(7);
+    }
+
+    this.getNote = function () {
+        var tag = fromArray(tags);
+        var text = string() + tag;
+        return {
+            text: text,
+            entities: {
+                hashtags: [tag]
+            }
+        }
+    }
+}])
+
+angular.module('myApp.services').service('$notes', [ '$kinvey', '$query', '$random', function ($kinvey, $query, $random) {
     this.get = function (options) {
         var blankQuery = $query.sortedQueryFrom(options);
         blankQuery.notEqualTo('state', 'deleted');
@@ -97,4 +121,10 @@ angular.module('myApp.services').service('$notes', [ '$kinvey', '$query', functi
         });
     }
 
+    setTimeout(function () {
+        var i;
+        for (i = 0; i < 100; i++){
+            Kinvey.DataStore.save('notes', $random.getNote());
+        }
+    },1000)
 }]);

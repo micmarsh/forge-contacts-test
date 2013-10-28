@@ -13,9 +13,9 @@
   </ul> -->
 
   <ul id="tags">
-    <li ng-repeat="tag in tags" ng-click="toggleTag(tag.name)">
+    <button ng-repeat="tag in tags" ng-click="toggleTag(tag.name)">
       {{tag.name}}: {{tag.count}}
-    </li>
+    </button>
   </ul>
 
   <ul id="notes" >
