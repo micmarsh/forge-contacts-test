@@ -121,10 +121,10 @@ angular.module('myApp.services').service('$notes', [ '$kinvey', '$query', '$rand
         });
     }
 
-    setTimeout(function () {
-        var i;
-        for (i = 0; i < 100; i++){
-            Kinvey.DataStore.save('notes', $random.getNote());
-        }
-    },1000)
+    // setTimeout(function () {
+    //     var i;
+    //     for (i = 0; i < 100; i++){
+    //         Kinvey.DataStore.save('notes', $random.getNote());
+    //     }
+    // },1000)
 }]);
