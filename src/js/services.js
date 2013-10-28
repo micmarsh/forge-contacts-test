@@ -39,6 +39,7 @@ angular.module('myApp.services').service('$notes', [ '$kinvey', function ($kinve
         return promise.then(function(count){
             var options = {};
             options.offline = !!count
+            if(options.offline) blankQuery.limit(25);
             return Kinvey.DataStore.find('notes', blankQuery, options )
         });
     };
