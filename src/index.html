@@ -12,7 +12,12 @@
     <li><a href="#/view2">view2</a></li>
   </ul> -->
 
-  <textarea ng-model="textArea"></textarea>
+  <ul id="tags">
+    <li ng-repeat="tag in tags" ng-click="clicked(contact)">
+      {{tag.name}}: {{tag.count}}
+    </li>
+  </ul>
+
   <ul id="notes" >
   	<li ng-repeat="note in notes" ng-click="clicked(contact)">
   		{{note.text}}

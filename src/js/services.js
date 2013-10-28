@@ -9,7 +9,7 @@ angular.module('myApp.services', []).
   value('version', '0.1');
 
 
-angular.module('myApp.services').service('$kinvey', [ function($kinvey){
+angular.module('myApp.services').service('$kinvey', [ function(){
     var LULZ_APP = {
         appKey: 'kid_ePfBz7N8xf',
         appSecret: 'e13392c82e8b4ba597ad8c043c991100'
@@ -29,18 +29,72 @@ angular.module('myApp.services').service('$kinvey', [ function($kinvey){
     Kinvey.fnUserPromise = Kinvey.init(APP);
     Kinvey.Sync.online();
 
+    Kinvey.fnUserPromise.then(function(){
+        if(!Kinvey.getActiveUser())
+            Kinvey.User.login("kdb","62cdb7020ff920e5aa642c3d4066950dd1f01f4d");
+    })
+
     return Kinvey;
 }]);
 
 angular.module('myApp.services').service('$notes', [ '$kinvey', function ($kinvey) {
     this.get = function () {
-        var blankQuery = new Kinvey.Query()
+        var blankQuery = new Kinvey.Query();
+        blankQuery.notEqualTo('state', 'deleted');
         var promise = Kinvey.DataStore.count('notes', blankQuery, {offline: true});
         return promise.then(function(count){
-            var options = {};
+            var options = { };
             options.offline = !!count
             if(options.offline) blankQuery.limit(25);
             return Kinvey.DataStore.find('notes', blankQuery, options )
         });
     };
+
+    var initialEntityAggregator = function(type, result) {
+      var agg;
+      if (result == null) result = [];
+      agg = new Kinvey.Group;
+      agg.initial({
+        result: result
+      });
+      return agg;
+    };
+
+
+    var makeTagGetter = function(type){
+        var field = "entities." + type;
+        var agg = initialEntityAggregator(type, { });
+        agg.reduce("function(doc,out){"+
+            "var "+type+" = doc."+field+";"+
+            "var tag = null;"+
+            "for(var i = 0; i < "+type+".length; i++){"+
+                "tag = "+type+"[i].toLowerCase();"+
+                "if(out.result[tag]){"+
+                    "out.result[tag]++;"+
+                "}else{"+
+                    "out.result[tag] = 1;"+
+                "}"+
+            "}"+
+        "}");
+        return agg;
+    };
+
+    this.getTags = function(){
+        var agg =  makeTagGetter('hashtags');
+        agg.query(new Kinvey.Query);
+        return Kinvey.DataStore.group('notes', agg, {offline: true}).then(function (_arg) {
+          var count, result, tag, _results;
+          result = _arg[0].result;
+          _results = [];
+          for (tag in result) {
+            count = result[tag];
+            _results.push({
+              name: tag,
+              count: count
+            });
+          }
+          return _results;
+        });
+    }
+
 }]);
