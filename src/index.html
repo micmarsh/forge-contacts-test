@@ -13,7 +13,7 @@
   </ul> -->
 
   <ul id="tags">
-    <li ng-repeat="tag in tags" ng-click="clicked(contact)">
+    <li ng-repeat="tag in tags" ng-click="toggleTag(tag)">
       {{tag.name}}: {{tag.count}}
     </li>
   </ul>

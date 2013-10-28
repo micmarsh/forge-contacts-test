@@ -8,23 +8,34 @@ angular.module('myApp.controllers', []).
       $scope.notes = [];
       $scope.tags = [];
 
-      $notes.get().then(function (notes){
-        $scope.$apply(function(){
-          $scope.notes = notes;
-        })
-      });
-
-      $notes.getTags().then(function (tags){
-        $scope.$apply(function(){
-          $scope.tags = tags;
+      function setNotes(options) {
+        $notes.get(options).then(function (notes){
+          $scope.$apply(function(){
+            $scope.notes = notes;
+          })
         });
-      }, function(error){
-        console.log(error);
-      });
+      };
+      setNotes({});
+
+      function setTags(options) {
+        $notes.getTags(options).then(function (tags){
+          $scope.$apply(function(){
+            $scope.tags = tags;
+          });
+        }, function(error){
+          console.log(error);
+        });
+      }
+      setTags({});
 
       var selectedTags = [];
       $scope.toggleTag = function (tag) {
-
+        var index = selectedTags.indexOf(tag);
+        if(index === -1)
+          selectedTags.push(tag);
+        else
+          selectedTags = selectedTags.slice(0, index) + selectedTags.slice(index + 1);
+        $notes.getTags({hashtags: selectedTags});
       }
   }])
   .controller('MyCtrl2', [function() {
