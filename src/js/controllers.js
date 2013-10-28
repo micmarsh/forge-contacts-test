@@ -31,10 +31,17 @@ angular.module('myApp.controllers', []).
       var selectedTags = [];
       $scope.toggleTag = function (tag) {
         var index = selectedTags.indexOf(tag);
-        if(index === -1)
+        if(index === -1){
           selectedTags.push(tag);
-        else
-          selectedTags = selectedTags.slice(0, index) + selectedTags.slice(index + 1);
+          console.log(selectedTags);
+
+        }else{
+          //TODO: wire up actual queries to make sure it filters down, should be pretty
+          //simple with query service, but then either place tag list next to notes,
+          //or make horizontal like app
+          selectedTags = selectedTags.slice(0, index).concat(selectedTags.slice(index + 1));
+          console.log(selectedTags);
+        }
         $notes.getTags({hashtags: selectedTags});
       }
   }])
